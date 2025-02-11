@@ -1,42 +1,23 @@
-from flask import Flask, request, jsonify
-import os
-
+from flask import Flask, jsonify, send_from_directory
+from os import path
+from SessionChecker import SessionChecker
+from Telegram import Login as Telegram
 app = Flask(__name__)
 
-# دالة لتعيين المتغير البيئي
-def set_env_variable(name, value):
-    os.environ[name] = value
+@app.route("/session")
+def session_route():
+    return jsonify({"is_active": SessionChecker().Check()})
 
-# دالة لاسترجاع المتغير البيئي
-def get_env_variable(name):
-    return os.getenv(name)
+@app.route("/login")
+def login_route():
+        if SessionChecker().Check():
+            return jsonify({"status": "You are already logged in."})
+        Telegram().Login()
+        return jsonify({"status": True})
 
-# Endpoint لتعيين متغير بيئي
-@app.route('/set_variable', methods=['POST'])
-def set_variable():
-    data = request.json  # الحصول على البيانات من الطلب بصيغة JSON
-    name = data.get('name')
-    value = data.get('value')
-
-    if not name or not value:
-        return jsonify({"error": "Both 'name' and 'value' are required"}), 400
-
-    set_env_variable(name, value)
-    return jsonify({"message": f"Environment variable '{name}' set to '{value}'"}), 200
-
-# Endpoint لاسترجاع المتغير البيئي
-@app.route('/get_variable', methods=['GET'])
-def get_variable():
-    name = request.args.get('name')
-
-    if not name:
-        return jsonify({"error": "'name' parameter is required"}), 400
-
-    value = get_env_variable(name)
-    if value is None:
-        return jsonify({"error": f"Environment variable '{name}' not found"}), 404
-
-    return jsonify({"name": name, "value": value}), 200
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon'), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
