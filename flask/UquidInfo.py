@@ -23,7 +23,7 @@ class UquidOrders:
     def __init__(self):
         cookies = getenv('Cookies')
         if cookies is not None:
-            self.cookies = getenv('Cookies')
+            self.cookies = loads(getenv('Cookies'))
 
     def _create_session(self):
         session = Session()
