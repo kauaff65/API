@@ -206,9 +206,3 @@ class Uquid:
         self.logger.info(f"Topup process completed in {elapsed:.2f} seconds.")
         return result
 
-if __name__ == '__main__':
-    phone = '+201018787861'
-    value = 70
-    uquid = Uquid(phone, value)
-    result = uquid.run()
-    print("Topup result:", result)
