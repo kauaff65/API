@@ -21,14 +21,21 @@ class UquidOrders:
         'Priority': 'u=0',
     }
     def __init__(self):
-        self.session = Session()
-        self.session.headers.update(self.HEADERS)
         cookies = getenv('Cookies')
         if cookies is not None:
-            self.session.cookies.update(loads(cookies))
+            self.cookies = getenv('Cookies')
+
+    def _create_session(self):
+        session = Session()
+        session.headers.update(self.HEADERS)
+        if self.cookies:
+            session.cookies.update(self.cookies)
+        return session
+
 
     def fetch_balance(self):
-        response = self.session.get(self.BASE_URL, params={'tab': 'wallet'})
+        session = self._create_session()
+        response = session.get(self.BASE_URL, params={'tab': 'wallet'})
         soup = BeautifulSoup(response.content, 'html.parser')
         usdt_row = soup.find('tr', {'data-symbol': 'USDT'})
         if usdt_row:
@@ -40,7 +47,8 @@ class UquidOrders:
         return "Balance not found"
 
     def fetch_orders_page(self):
-        response = self.session.get(
+        session = self._create_session()
+        response = session.get(
             self.BASE_URL,
             params={'tab': 'order', 'tv': 'QmNzjIhpDMPT', 't': 'xuztLEcV'}
         )
