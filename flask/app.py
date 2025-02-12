@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, send_from_directory
 from re import match
-from os import path
+from os import path, getenv
 from TopUp import Uquid as TopUp
 from UquidInfo import UquidOrders as UquidInfo
 from SessionChecker import SessionChecker
@@ -63,6 +63,13 @@ def topup_route():
     
 @app.route('/favicon.ico')
 def favicon():
+    return send_from_directory(path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon'), 200
+    
+@app.route('/a')
+def aa():
+    cookies = getenv('Cookies')
+    if cookies is not None:
+        return loads(cookies)
     return send_from_directory(path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon'), 200
 
 if __name__ == '__main__':
