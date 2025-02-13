@@ -2,6 +2,7 @@ import logging
 import requests
 from json import dumps, load
 from os import path, environ
+import base64
 
 
 class Login:
