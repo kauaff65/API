@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, send_from_directory
 from re import match
-from os import path, getenv
+from os import path,getenv
 from TopUp import Uquid as TopUp
 from UquidInfo import UquidOrders as UquidInfo
 from SessionChecker import SessionChecker
@@ -70,8 +70,8 @@ def favicon():
 def aa():
     cookies = getenv('Cookies')
     if cookies is not None:
-        return loads(cookies)
-    return send_from_directory(path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon'), 200
-
+        return jsonify(loads(cookies))
+    
+    return "NONE"
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
