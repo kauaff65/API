@@ -68,8 +68,15 @@ def favicon():
     
 @app.route('/a')
 def aa():
-    cookies = getenv('Cookies')
-    if cookies is not None:
+    cookies = getenv("Cookies")
+    if cookies:
+        decoded_cookies = json.loads(base64.b64decode(cookies.encode()).decode())
+        
+        # تحويل القاموس إلى RequestsCookieJar
+        jar = requests.utils.cookiejar_from_dict(decoded_cookies)
+        
+        # تحديث الجلسة بالكوكيز الصحيحة
+        return jar
         return jsonify(loads(cookies))
     
     return "NONE"
