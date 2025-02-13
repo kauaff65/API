@@ -3,7 +3,7 @@ from os import getenv
 from json import dumps, loads
 from requests import Session
 from bs4 import BeautifulSoup
-
+import base64
 
 class UquidOrders:
     BASE_URL = "https://shop.uquid.com/myaccount/"
