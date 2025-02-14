@@ -1,9 +1,8 @@
 import concurrent.futures
 from os import getenv
 from json import dumps, loads
-from requests import Session,utils 
+from requests import Session 
 from bs4 import BeautifulSoup
-import base64
 
 class UquidOrders:
     BASE_URL = "https://shop.uquid.com/myaccount/"
@@ -23,10 +22,7 @@ class UquidOrders:
     def __init__(self):
         cookies = getenv('Cookies')
         if cookies is not None:
-            decoded_cookies = loads(base64.b64decode(cookies.encode()).decode())
-            jar = utils.cookiejar_from_dict(decoded_cookies)
-            self.cookies = jar
-            # self.cookies = loads(getenv('Cookies'))
+            self.cookies = loads(cookies)
 
     def _create_session(self):
         session = Session()
@@ -96,4 +92,3 @@ class UquidOrders:
             'orders': orders
         }
         return dumps(data, indent=4)
-
