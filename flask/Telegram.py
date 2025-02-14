@@ -76,10 +76,7 @@ class Login:
         try:
             user_data = self.fetch_user_data()
             self.login(user_data)
-            cookies_dict = self.session.cookies.get_dict(domain=".shop.uquid.com")
-            encoded_cookies = base64.b64encode(dumps(cookies_dict).encode()).decode()
-            environ["Cookies"] = encoded_cookies
-            # environ["Cookies"] = dumps(self.session.cookies.get_dict(domain=".shop.uquid.com"))
+            environ["Cookies"]  = dumps(self.session.cookies.get_dict(domain=".shop.uquid.com"))
         except Exception as e:
             self.logger.error("Error during login process: %s", str(e))
             raise
