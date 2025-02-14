@@ -1,14 +1,20 @@
 from flask import Flask, jsonify, request, send_from_directory
 from re import match
-from os import path,getenv
+from os import path, getenv, environ
 from TopUp import Uquid as TopUp
 from UquidInfo import UquidOrders as UquidInfo
 from SessionChecker import SessionChecker
 from Telegram import Login as Telegram
-from json import loads
+from json import loads, dumps
 import base64
-from requests import utils
+
+
 app = Flask(__name__)
+environ["Cookies"]  = dumps({
+    "_ga_utm": "4eb7dc46753816a2",
+    "abf9f4c00c53bffa916c65ca322ffe06": "nozQYE88W1fMzTdcgtKBEKGQPI6lTD1ZkycPvtCBy2sAvTf5fs68l%2Bn8JrdOcqXv",
+    "uss_e0e1d64fdac4188f087c4d44060de65e": "ijpqkqqu69b3k40dha5b0arirqpg8rol"
+})
 
 @app.route("/session")
 def session_route():
@@ -17,9 +23,9 @@ def session_route():
 @app.route("/login")
 def login_route():
         if SessionChecker().Check():
-            return jsonify({"status1": "You are already logged in."})
+            return jsonify({"status": "You are already logged in."})
         Telegram().Login()
-        return jsonify({"status1": True})
+        return jsonify({"status": True})
 
 @app.route("/balance")
 def balance_route():
@@ -67,20 +73,12 @@ def topup_route():
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon'), 200
-    
+
 @app.route('/a')
 def aa():
     cookies = getenv("Cookies")
     if cookies:
-        decoded_cookies = loads(base64.b64decode(cookies.encode()).decode())
-        
-        # تحويل القاموس إلى RequestsCookieJar
-        jar = utils.cookiejar_from_dict(decoded_cookies)
-        
-        # تحديث الجلسة بالكوكيز الصحيحة
-        return jar
         return jsonify(loads(cookies))
-    
-    return "NONE"
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    return "null"
+if __name__ == "__main__":
+    app.run(debug=True)
