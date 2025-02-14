@@ -17,7 +17,7 @@ def login_route():
         if SessionChecker().Check():
             return jsonify({"status1": "You are already logged in."})
         Telegram().Login()
-        return jsonify({"status": True})
+        return jsonify({"status1": True})
 
 @app.route("/balance")
 def balance_route():
