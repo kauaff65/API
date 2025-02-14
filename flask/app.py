@@ -11,11 +11,6 @@ import base64
 
 
 app = Flask(__name__)
-environ["Cookies"]  = dumps({
-    "_ga_utm": "4eb7dc46753816a2",
-    "abf9f4c00c53bffa916c65ca322ffe06": "nozQYE88W1fMzTdcgtKBEKGQPI6lTD1ZkycPvtCBy2sAvTf5fs68l%2Bn8JrdOcqXv",
-    "uss_e0e1d64fdac4188f087c4d44060de65e": "ijpqkqqu69b3k40dha5b0arirqpg8rol"
-})
 
 @app.route("/session")
 def session_route():
