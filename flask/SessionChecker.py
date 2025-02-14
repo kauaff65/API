@@ -1,12 +1,11 @@
-from requests import Session
+from requests import Session, utils
 from os import getenv
-from json import loads
+import json 
+import base64 
 
 class SessionChecker:
     BASE_URL = "https://shop.uquid.com"
     LOGIN_ENDPOINT = "/game/claim_free"
-    SESSION_FILE = 'Session.json'
-
     def __init__(self):
         self.session = Session()
         self.session.headers.update({
@@ -21,11 +20,12 @@ class SessionChecker:
             'Sec-Fetch-Mode': 'cors',
             'Sec-Fetch-Site': 'same-origin',
         })
-
     def Check(self):
-        cookies = getenv('Cookies')
-        if cookies is not None:
-            self.session.cookies.update(loads(cookies))
+        cookies = getenv("Cookies")
+        if cookies:
+            decoded_cookies = json.loads(base64.b64decode(cookies.encode()).decode())
+            jar = utils.cookiejar_from_dict(decoded_cookies)
+            self.session.cookies.update(jar)
             try:
                 response = self.session.post(f'{self.BASE_URL}{self.LOGIN_ENDPOINT}', timeout=10)
                 if response.status_code == 200 and "Please login to use this function." not in response.text:
