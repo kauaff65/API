@@ -1,7 +1,7 @@
 import concurrent.futures
 from os import getenv
 from json import dumps, loads
-from requests import Session
+from requests import Session,utils 
 from bs4 import BeautifulSoup
 import base64
 
@@ -23,8 +23,8 @@ class UquidOrders:
     def __init__(self):
         cookies = getenv('Cookies')
         if cookies is not None:
-            decoded_cookies = json.loads(base64.b64decode(cookies.encode()).decode())
-            jar = requests.utils.cookiejar_from_dict(decoded_cookies)
+            decoded_cookies = loads(base64.b64decode(cookies.encode()).decode())
+            jar = utils.cookiejar_from_dict(decoded_cookies)
             self.cookies = jar
             # self.cookies = loads(getenv('Cookies'))
 
