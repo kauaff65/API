@@ -28,6 +28,7 @@ class SessionChecker:
             self.session.cookies.update(jar)
             try:
                 response = self.session.post(f'{self.BASE_URL}{self.LOGIN_ENDPOINT}', timeout=10)
+                return response.text
                 if response.status_code == 200 and "Please login to use this function." not in response.text:
                     return True
                 else:
