@@ -1,7 +1,6 @@
-from requests import Session, utils
+from requests import Session
 from os import getenv
 import json 
-import base64 
 
 class SessionChecker:
     BASE_URL = "https://shop.uquid.com"
@@ -23,12 +22,9 @@ class SessionChecker:
     def Check(self):
         cookies = getenv("Cookies")
         if cookies:
-            decoded_cookies = json.loads(base64.b64decode(cookies.encode()).decode())
-            jar = utils.cookiejar_from_dict(decoded_cookies)
-            self.session.cookies.update(jar)
+            self.session.cookies.update(json.loads(cookies))
             try:
                 response = self.session.post(f'{self.BASE_URL}{self.LOGIN_ENDPOINT}', timeout=10)
-                return response.text
                 if response.status_code == 200 and "Please login to use this function." not in response.text:
                     return True
                 else:
