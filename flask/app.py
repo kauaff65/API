@@ -6,6 +6,8 @@ from UquidInfo import UquidOrders as UquidInfo
 from SessionChecker import SessionChecker
 from Telegram import Login as Telegram
 from json import loads
+import base64
+from requests import utils
 app = Flask(__name__)
 
 @app.route("/session")
@@ -70,10 +72,10 @@ def favicon():
 def aa():
     cookies = getenv("Cookies")
     if cookies:
-        decoded_cookies = json.loads(base64.b64decode(cookies.encode()).decode())
+        decoded_cookies = loads(base64.b64decode(cookies.encode()).decode())
         
         # تحويل القاموس إلى RequestsCookieJar
-        jar = requests.utils.cookiejar_from_dict(decoded_cookies)
+        jar = utils.cookiejar_from_dict(decoded_cookies)
         
         # تحديث الجلسة بالكوكيز الصحيحة
         return jar
